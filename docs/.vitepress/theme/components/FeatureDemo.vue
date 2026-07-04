@@ -12,6 +12,7 @@ import ShowPickerDemo from './demos/ShowPickerDemo.vue';
 import InertDemo from './demos/InertDemo.vue';
 import CustomizableSelectDemo from './demos/CustomizableSelectDemo.vue';
 import HiddenUntilFoundDemo from './demos/HiddenUntilFoundDemo.vue';
+import ModernPatternDemo from './demos/ModernPatternDemo.vue';
 
 const props = defineProps({
   slug: {
@@ -34,6 +35,25 @@ const components = {
   inert: InertDemo,
   'customizable-select': CustomizableSelectDemo,
   'hidden-until-found': HiddenUntilFoundDemo,
+  'responsive-images': ModernPatternDemo,
+  'native-lazy-loading': ModernPatternDemo,
+  'fetch-priority': ModernPatternDemo,
+  'preload-links': ModernPatternDemo,
+  modulepreload: ModernPatternDemo,
+  'blocking-render': ModernPatternDemo,
+  'import-maps': ModernPatternDemo,
+  'speculation-rules': ModernPatternDemo,
+  datalist: ModernPatternDemo,
+  'form-attribute': ModernPatternDemo,
+  'submitter-overrides': ModernPatternDemo,
+  'constraint-validation': ModernPatternDemo,
+  'input-hints': ModernPatternDemo,
+  'download-attribute': ModernPatternDemo,
+  'theme-color': ModernPatternDemo,
+  'color-scheme-meta': ModernPatternDemo,
+  'iframe-sandbox': ModernPatternDemo,
+  'iframe-srcdoc': ModernPatternDemo,
+  'iframe-credentialless': ModernPatternDemo,
 };
 
 const feature = computed(() => features.value.find((item) => item.slug === props.slug));
@@ -48,7 +68,7 @@ const demoComponent = computed(() => components[props.slug]);
       <p>{{ feature.support }}</p>
     </div>
     <div class="ah5-demo-stage">
-      <component :is="demoComponent" v-if="demoComponent" />
+      <component :is="demoComponent" v-if="demoComponent" :slug="props.slug" />
       <p v-else class="demo-note">{{ text.demo.noDemo }}</p>
     </div>
   </section>

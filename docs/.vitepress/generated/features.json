@@ -306,5 +306,537 @@
     "caniuse": "https://caniuse.com/mdn-html_global_attributes_hidden_until-found",
     "originalCategory": "Findability",
     "categorySlug": "findability"
+  },
+  {
+    "name": "Responsive images",
+    "slug": "responsive-images",
+    "category": "Media",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "The picture element, srcset, and sizes are broadly interoperable; final selection depends on media queries, device pixel ratio, image type support, and layout.",
+    "summary": "Let the browser choose the right image candidate for viewport, density, and format instead of shipping one oversized asset everywhere.",
+    "solves": "Art-directed hero images, dense product grids, and editorial media where layout and network cost change across breakpoints.",
+    "syntax": "<picture>\n  <source type=\"image/avif\" srcset=\"hero.avif 1200w, hero@2x.avif 2400w\" sizes=\"(min-width: 900px) 50vw, 100vw\">\n  <img src=\"hero.jpg\" srcset=\"hero-600.jpg 600w, hero-1200.jpg 1200w\" sizes=\"100vw\" alt=\"Project preview\">\n</picture>",
+    "demo": "An editorial media slot that documents which candidate the browser is allowed to pick at each layout size.",
+    "usage": "Use width descriptors with sizes for flexible layouts. Use picture when the crop or format should change, not just the resolution.",
+    "pitfalls": [
+      "Wrong sizes values can make the browser choose a much larger image than needed.",
+      "picture still needs an img fallback with useful alt text.",
+      "Do not use art direction to hide important content on small screens."
+    ],
+    "accessibility": [
+      "Keep alt text on the img element.",
+      "Make every art-directed crop preserve the same meaning.",
+      "Avoid text baked into responsive images when real text can be used."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/picture",
+    "spec": "https://html.spec.whatwg.org/multipage/images.html#the-picture-element",
+    "caniuse": "https://caniuse.com/srcset",
+    "originalCategory": "Media",
+    "categorySlug": "media"
+  },
+  {
+    "name": "Native lazy loading",
+    "slug": "native-lazy-loading",
+    "category": "Loading and performance",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "Native lazy loading is widely available for images and iframes; exact load distance is intentionally browser-controlled.",
+    "summary": "Defer below-the-fold images and iframes with one attribute instead of shipping scroll observers for every asset.",
+    "solves": "Long content pages, galleries, embeds, and docs where non-critical media should not compete with above-the-fold content.",
+    "syntax": "<img src=\"report-chart.png\" loading=\"lazy\" alt=\"Quarterly report chart\">\n<iframe src=\"/demo/map\" loading=\"lazy\" title=\"Office map\"></iframe>",
+    "demo": "A gallery queue that separates eager hero media from lazy supporting media.",
+    "usage": "Use lazy for offscreen media. Keep critical hero images eager and pair them with explicit width and height to avoid layout shift.",
+    "pitfalls": [
+      "Lazy loading above-the-fold images can hurt perceived performance.",
+      "The browser decides when a lazy resource is close enough to load.",
+      "Always reserve dimensions so unloaded media does not shift content."
+    ],
+    "accessibility": [
+      "Keep alt text and iframe titles meaningful.",
+      "Do not lazy-load content that is required before the user can understand the page.",
+      "Avoid replacing lazy media with inaccessible placeholders."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img",
+    "spec": "https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes",
+    "caniuse": "https://caniuse.com/loading-lazy-attr",
+    "originalCategory": "Loading and performance",
+    "categorySlug": "loading-and-performance"
+  },
+  {
+    "name": "Fetch priority",
+    "slug": "fetch-priority",
+    "category": "Loading and performance",
+    "maturity": "baseline",
+    "status": "Baseline 2024",
+    "support": "The fetchpriority attribute is Baseline newly available; browsers treat it as a priority hint rather than a hard scheduling command.",
+    "summary": "Tell the browser which otherwise-similar resources deserve higher or lower fetch priority directly in markup.",
+    "solves": "Hero images, late-discovered preloads, and low-value decorative resources that need better relative ordering.",
+    "syntax": "<img src=\"hero.avif\" fetchpriority=\"high\" alt=\"Dashboard overview\">\n<img src=\"avatar.png\" loading=\"lazy\" fetchpriority=\"low\" alt=\"Team member\">",
+    "demo": "A launch page resource board that marks the hero image high and decorative assets low.",
+    "usage": "Use sparingly for resources whose importance the browser cannot infer. Prefer fixing discovery order before adding priority hints.",
+    "pitfalls": [
+      "fetchpriority does not make a hidden or late-discovered resource magically early.",
+      "Too many high-priority resources cancel out the signal.",
+      "Priority hints are browser scheduling hints, not guaranteed ordering."
+    ],
+    "accessibility": [
+      "Performance hints must not change source order or reading order.",
+      "Do not prioritize decorative media over meaningful content.",
+      "Keep fallback content and alt text independent of priority."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority",
+    "spec": "https://html.spec.whatwg.org/multipage/urls-and-fetching.html#fetch-priority-attributes",
+    "caniuse": "https://caniuse.com/mdn-api_htmlimageelement_fetchpriority",
+    "originalCategory": "Loading and performance",
+    "categorySlug": "loading-and-performance"
+  },
+  {
+    "name": "Preload links",
+    "slug": "preload-links",
+    "category": "Loading and performance",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "rel=preload is widely available for declaring high-confidence resources early in the document head.",
+    "summary": "Start fetching critical fonts, images, or scripts before the browser would otherwise discover them.",
+    "solves": "Critical resources referenced from CSS, late template chunks, and above-the-fold assets that should arrive earlier.",
+    "syntax": "<link rel=\"preload\" href=\"/fonts/plex.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>\n<link rel=\"preload\" href=\"/hero.avif\" as=\"image\" imagesrcset=\"hero.avif 1200w, hero@2x.avif 2400w\" imagesizes=\"100vw\">",
+    "demo": "A checkout page head plan that distinguishes preload candidates from ordinary assets.",
+    "usage": "Use only for resources needed by the current navigation. Include the correct as, type, and crossorigin values.",
+    "pitfalls": [
+      "Preloading unused resources wastes bandwidth.",
+      "Wrong as or crossorigin values can trigger duplicate downloads.",
+      "Do not preload everything; the browser already has a scheduler."
+    ],
+    "accessibility": [
+      "Preload should improve delivery without changing semantic order.",
+      "Do not hide meaningful fallback text while waiting for preloaded assets.",
+      "Prioritize resources that help users read or operate the page."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload",
+    "spec": "https://html.spec.whatwg.org/multipage/links.html#link-type-preload",
+    "caniuse": "https://caniuse.com/link-rel-preload",
+    "originalCategory": "Loading and performance",
+    "categorySlug": "loading-and-performance"
+  },
+  {
+    "name": "modulepreload",
+    "slug": "modulepreload",
+    "category": "Loading and performance",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "modulepreload is widely available in modern browsers for warming JavaScript module graphs.",
+    "summary": "Preload ES modules into the module map so app entrypoints and their dependencies are ready sooner.",
+    "solves": "Module-based apps where the parser can see an entrypoint but the dependency graph would otherwise be discovered step by step.",
+    "syntax": "<link rel=\"modulepreload\" href=\"/assets/app.js\">\n<script type=\"module\" src=\"/assets/app.js\"></script>",
+    "demo": "A module graph warmup plan that shows which imports should be available before hydration starts.",
+    "usage": "Use for important module entrypoints or chunks you know the current page will execute.",
+    "pitfalls": [
+      "modulepreload is not a replacement for code splitting.",
+      "Preloading stale or route-only chunks can waste bandwidth.",
+      "Cross-origin modules need correct CORS behavior."
+    ],
+    "accessibility": [
+      "Module warmup should not be required for core readable content.",
+      "Keep server-rendered content meaningful before modules execute.",
+      "Avoid blocking essential controls on non-critical modules."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/modulepreload",
+    "spec": "https://html.spec.whatwg.org/multipage/links.html#link-type-modulepreload",
+    "caniuse": "https://caniuse.com/mdn-html_elements_link_rel_modulepreload",
+    "originalCategory": "Loading and performance",
+    "categorySlug": "loading-and-performance"
+  },
+  {
+    "name": "blocking=render",
+    "slug": "blocking-render",
+    "category": "Loading and performance",
+    "maturity": "limited",
+    "status": "Limited availability",
+    "support": "The blocking attribute is useful to understand but should be treated as a targeted enhancement while support matures.",
+    "summary": "Explicitly make a dynamically inserted script, style, or stylesheet block rendering until it is ready.",
+    "solves": "Small critical head resources that are injected dynamically but still must apply before first paint.",
+    "syntax": "<script async blocking=\"render\" src=\"/critical-theme.js\"></script>\n<link rel=\"stylesheet\" blocking=\"render\" href=\"/critical.css\">",
+    "demo": "A first-paint checklist that separates render-blocking theme code from non-critical enhancements.",
+    "usage": "Use only for small, truly critical resources. Most pages should prefer normal parser-discovered stylesheets and avoid extra render blocking.",
+    "pitfalls": [
+      "Render blocking delays first paint.",
+      "Only head resources can affect render blocking.",
+      "Large scripts or stylesheets can make the page feel frozen."
+    ],
+    "accessibility": [
+      "Do not block rendering on decorative-only resources.",
+      "Keep initial content understandable if the enhancement fails.",
+      "Avoid blocking controls needed for emergency or account flows."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/blocking",
+    "spec": "https://html.spec.whatwg.org/multipage/urls-and-fetching.html#blocking-attributes",
+    "caniuse": "https://caniuse.com/?search=blocking%3D%22render%22",
+    "originalCategory": "Loading and performance",
+    "categorySlug": "loading-and-performance"
+  },
+  {
+    "name": "Import maps",
+    "slug": "import-maps",
+    "category": "Scripts and navigation",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "Import maps have been broadly available across modern browsers since March 2023.",
+    "summary": "Map bare JavaScript module specifiers to URLs directly in HTML without a bundler rewrite.",
+    "solves": "Small apps, prototypes, design systems, and server-rendered pages that want readable module imports in the browser.",
+    "syntax": "<script type=\"importmap\">\n{\n  \"imports\": {\n    \"lit\": \"/vendor/lit.js\",\n    \"app/\": \"/assets/app/\"\n  }\n}\n</script>\n<script type=\"module\">import { html } from 'lit';</script>",
+    "demo": "A design-system import map that routes stable package names to versioned browser modules.",
+    "usage": "Define import maps before the module scripts that rely on them. Keep maps small and cache module URLs deliberately.",
+    "pitfalls": [
+      "Import maps are document-scoped.",
+      "They must be parsed before dependent modules load.",
+      "Large maps can become deployment configuration that needs version control."
+    ],
+    "accessibility": [
+      "Do not make basic content depend on a client-only module map.",
+      "Keep no-JS rendering meaningful.",
+      "Use module errors that fail visibly during development."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap",
+    "spec": "https://html.spec.whatwg.org/multipage/webappapis.html#import-maps",
+    "caniuse": "https://caniuse.com/import-maps",
+    "originalCategory": "Scripts and navigation",
+    "categorySlug": "scripts-and-navigation"
+  },
+  {
+    "name": "Speculation rules",
+    "slug": "speculation-rules",
+    "category": "Scripts and navigation",
+    "maturity": "limited",
+    "status": "Limited availability",
+    "support": "Speculation rules are not Baseline; support is strongest in Chromium-derived browsers and should be used as progressive enhancement.",
+    "summary": "Declare likely future navigations so the browser can prefetch or prerender whole documents.",
+    "solves": "Multi-page apps, docs, ecommerce flows, and dashboards where the next navigation is predictable.",
+    "syntax": "<script type=\"speculationrules\">\n{\n  \"prefetch\": [{ \"urls\": [\"/pricing\", \"/docs/start\"] }],\n  \"prerender\": [{ \"where\": { \"href_matches\": \"/checkout/*\" } }]\n}\n</script>",
+    "demo": "A docs navigation plan that prefetches likely next pages but avoids state-changing routes.",
+    "usage": "Use on safe GET navigations. Start with conservative prefetch rules before trying prerender.",
+    "pitfalls": [
+      "Do not speculate logout, cart mutation, or analytics-heavy routes.",
+      "Prerender can run page code earlier than a user expects.",
+      "Rules should respect authentication and privacy boundaries."
+    ],
+    "accessibility": [
+      "Speculation must not change focus, announce content, or mutate state before navigation.",
+      "Keep navigation links usable without speculation support.",
+      "Avoid preloading sensitive pages for shared devices."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/speculationrules",
+    "spec": "https://html.spec.whatwg.org/multipage/scripting.html#attr-script-type",
+    "caniuse": "https://caniuse.com/speculation-rules",
+    "originalCategory": "Scripts and navigation",
+    "categorySlug": "scripts-and-navigation"
+  },
+  {
+    "name": "datalist",
+    "slug": "datalist",
+    "category": "Forms",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "datalist is a long-standing form feature, though rendering and filtering details vary by browser and input type.",
+    "summary": "Offer native suggestions for an input while still allowing values outside the suggestion list.",
+    "solves": "Search boxes, airport codes, saved filters, and administrative inputs where suggestions help but should not constrain the user.",
+    "syntax": "<label for=\"airport\">Airport</label>\n<input id=\"airport\" name=\"airport\" list=\"airport-options\">\n<datalist id=\"airport-options\">\n  <option value=\"SFO\"></option>\n  <option value=\"HND\"></option>\n</datalist>",
+    "demo": "A route planner input that suggests airport codes while allowing custom charter stops.",
+    "usage": "Use when suggestions are helpful but not exclusive. Use select when the user must choose one of a fixed set.",
+    "pitfalls": [
+      "Styling the popup is intentionally limited.",
+      "Some input types have uneven datalist support.",
+      "Suggestions are not validation."
+    ],
+    "accessibility": [
+      "Keep a visible label on the input.",
+      "Do not rely on placeholder text as the only instruction.",
+      "Validate free-form values when the backend has constraints."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/datalist",
+    "spec": "https://html.spec.whatwg.org/multipage/form-elements.html#the-datalist-element",
+    "caniuse": "https://caniuse.com/datalist",
+    "originalCategory": "Forms",
+    "categorySlug": "forms"
+  },
+  {
+    "name": "form attribute",
+    "slug": "form-attribute",
+    "category": "Forms",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "The form owner attribute is widely supported for associating controls with forms outside their DOM ancestor.",
+    "summary": "Associate controls with a form by id even when layout places them outside the form element.",
+    "solves": "Sticky toolbars, split layouts, tables, and modals where submit buttons or inputs cannot live inside the form markup.",
+    "syntax": "<form id=\"profile-form\"></form>\n<input name=\"displayName\" form=\"profile-form\">\n<button type=\"submit\" form=\"profile-form\">Save profile</button>",
+    "demo": "A split profile editor where a sticky footer button submits the form without wrapping the whole layout.",
+    "usage": "Use when layout structure and form ownership need to differ. Keep the relationship obvious in code with stable ids.",
+    "pitfalls": [
+      "The target form id must be stable and unique.",
+      "Not every custom abstraction forwards form attributes correctly.",
+      "The visual grouping can mislead users if labels and sections are unclear."
+    ],
+    "accessibility": [
+      "Keep related controls visually grouped and labeled.",
+      "Make submit buttons clearly describe which form they submit.",
+      "Do not separate controls so far that keyboard users lose context."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/form",
+    "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fae-form",
+    "caniuse": "https://caniuse.com/?search=form%20attribute",
+    "originalCategory": "Forms",
+    "categorySlug": "forms"
+  },
+  {
+    "name": "Submitter overrides",
+    "slug": "submitter-overrides",
+    "category": "Forms",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "Submitter attributes such as formaction, formmethod, formenctype, formtarget, and formnovalidate are widely supported.",
+    "summary": "Let individual submit buttons override where and how a form submits.",
+    "solves": "Save draft, publish, preview, export, and destructive confirmation flows that share fields but differ in submission intent.",
+    "syntax": "<form action=\"/publish\" method=\"post\">\n  <button type=\"submit\" formaction=\"/drafts\" formnovalidate>Save draft</button>\n  <button type=\"submit\">Publish</button>\n</form>",
+    "demo": "A CMS action bar where Save draft skips validation while Publish keeps full validation.",
+    "usage": "Use when one set of fields has multiple legitimate submit destinations or validation modes.",
+    "pitfalls": [
+      "Only submit buttons can use submitter overrides.",
+      "Server-side routing must still verify user intent.",
+      "formnovalidate should not bypass required checks for final submission."
+    ],
+    "accessibility": [
+      "Button labels must state the outcome.",
+      "Warn before irreversible actions.",
+      "Preserve validation messages for final submit paths."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button",
+    "spec": "https://html.spec.whatwg.org/multipage/form-elements.html#attr-button-formaction",
+    "caniuse": "https://caniuse.com/?search=formaction",
+    "originalCategory": "Forms",
+    "categorySlug": "forms"
+  },
+  {
+    "name": "Constraint validation",
+    "slug": "constraint-validation",
+    "category": "Forms",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "HTML constraint validation is widely supported for native form controls and provides browser-owned validity states.",
+    "summary": "Use required, pattern, minlength, min, max, step, and related constraints before writing custom validators.",
+    "solves": "Forms that need immediate, native validation feedback without rebuilding basic validity state from scratch.",
+    "syntax": "<input name=\"repo\" required pattern=\"[a-z0-9-]+\" minlength=\"3\">\n<input name=\"stars\" type=\"number\" min=\"0\" step=\"1\">\n<button>Save</button>",
+    "demo": "A repository settings form that shows which constraints are native and which remain product rules.",
+    "usage": "Use native constraints for syntax and presence checks, then layer product-specific validation on top.",
+    "pitfalls": [
+      "pattern validates full values, not partial matches.",
+      "Native messages vary by browser and locale.",
+      "Client validation never replaces server validation."
+    ],
+    "accessibility": [
+      "Associate errors with fields.",
+      "Do not rely on color alone for invalid state.",
+      "Keep instructions visible before the user submits."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Constraint_validation",
+    "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#constraints",
+    "caniuse": "https://caniuse.com/form-validation",
+    "originalCategory": "Forms",
+    "categorySlug": "forms"
+  },
+  {
+    "name": "Input hints",
+    "slug": "input-hints",
+    "category": "Forms",
+    "maturity": "widely",
+    "status": "Baseline 2021",
+    "support": "inputmode and enterkeyhint are widely available and especially useful on virtual keyboards.",
+    "summary": "Hint the right mobile keyboard and enter-key action without changing the semantic input type.",
+    "solves": "OTP, price, search, and chat inputs where keyboard ergonomics matter but validation semantics are separate.",
+    "syntax": "<input autocomplete=\"one-time-code\" inputmode=\"numeric\" enterkeyhint=\"done\" maxlength=\"6\">\n<input type=\"search\" enterkeyhint=\"search\" autocomplete=\"off\">",
+    "demo": "A sign-in code form that uses numeric keyboard hints and one-time-code autocomplete.",
+    "usage": "Use inputmode for keyboard shape, type for data semantics, and autocomplete tokens for autofill intent.",
+    "pitfalls": [
+      "inputmode does not validate the value.",
+      "Virtual keyboard behavior varies by platform.",
+      "autocomplete tokens must match real field purpose."
+    ],
+    "accessibility": [
+      "Keep visible labels and instructions.",
+      "Do not hide paste support for one-time codes.",
+      "Use autocomplete responsibly for personal data."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inputmode",
+    "spec": "https://html.spec.whatwg.org/multipage/interaction.html#attr-inputmode",
+    "caniuse": "https://caniuse.com/input-inputmode",
+    "originalCategory": "Forms",
+    "categorySlug": "forms"
+  },
+  {
+    "name": "download attribute",
+    "slug": "download-attribute",
+    "category": "Links and metadata",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "The download attribute is widely available, with same-origin and browser policy limits that can affect whether it is honored.",
+    "summary": "Mark a link as a download and provide a suggested filename without JavaScript.",
+    "solves": "Export buttons, generated reports, invoices, CSV templates, and local Blob downloads.",
+    "syntax": "<a href=\"/exports/orders.csv\" download=\"orders-2026-07.csv\">Download CSV</a>",
+    "demo": "A report export link that names the file and keeps navigation behavior clear.",
+    "usage": "Use for same-origin files or generated Blob URLs where a download is the user's intended action.",
+    "pitfalls": [
+      "Cross-origin downloads may ignore the suggested filename.",
+      "The browser can adjust invalid filenames.",
+      "download is a hint, not a permission bypass."
+    ],
+    "accessibility": [
+      "Link text should say what file type or result will download.",
+      "Expose file size when it is significant.",
+      "Do not surprise users by downloading from ordinary navigation links."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a",
+    "spec": "https://html.spec.whatwg.org/multipage/links.html#attr-hyperlink-download",
+    "caniuse": "https://caniuse.com/download",
+    "originalCategory": "Links and metadata",
+    "categorySlug": "links-and-metadata"
+  },
+  {
+    "name": "theme-color",
+    "slug": "theme-color",
+    "category": "Links and metadata",
+    "maturity": "limited",
+    "status": "Limited availability",
+    "support": "theme-color is useful for browser chrome and installed experiences, but support and exact UI effects vary by browser and platform.",
+    "summary": "Suggest colors for the browser or surrounding UI using meta tags, optionally scoped by media query.",
+    "solves": "Mobile browser chrome, installed web app polish, and dark/light brand alignment outside the page canvas.",
+    "syntax": "<meta name=\"theme-color\" content=\"#ffffff\" media=\"(prefers-color-scheme: light)\">\n<meta name=\"theme-color\" content=\"#0f172a\" media=\"(prefers-color-scheme: dark)\">",
+    "demo": "A brand chrome palette that pairs page theme tokens with browser UI theme-color tags.",
+    "usage": "Use one or more meta tags in the head. Add media queries when the page supports multiple color schemes.",
+    "pitfalls": [
+      "Some desktop browsers parse it but do not visibly use it.",
+      "Platform UI can override or transform the color.",
+      "The tag should follow theme changes if the user can switch themes."
+    ],
+    "accessibility": [
+      "Choose colors with sufficient contrast against browser UI icons where applicable.",
+      "Keep page content contrast independent from browser chrome.",
+      "Do not rely on chrome color as the only state indicator."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/name/theme-color",
+    "spec": "https://html.spec.whatwg.org/multipage/semantics.html#meta-theme-color",
+    "caniuse": "https://caniuse.com/?search=theme-color",
+    "originalCategory": "Links and metadata",
+    "categorySlug": "links-and-metadata"
+  },
+  {
+    "name": "color-scheme meta",
+    "slug": "color-scheme-meta",
+    "category": "Links and metadata",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "meta name=color-scheme is broadly supported and works with the browser's form controls, scrollbars, and default colors.",
+    "summary": "Tell the browser which color schemes the document supports before CSS has fully loaded.",
+    "solves": "Dark mode pages where native controls and UA surfaces should not flash with the wrong default scheme.",
+    "syntax": "<meta name=\"color-scheme\" content=\"dark light\">",
+    "demo": "A settings page head snippet that aligns native controls with the page's dark and light modes.",
+    "usage": "Use in the head when the whole document supports light, dark, or both. Pair with CSS color-scheme for component-level control.",
+    "pitfalls": [
+      "This does not create a complete theme by itself.",
+      "Order matters when declaring preference.",
+      "Some embedded content may have its own scheme."
+    ],
+    "accessibility": [
+      "Respect user color-scheme preferences.",
+      "Maintain contrast in both schemes.",
+      "Test native controls, scrollbars, and selection colors."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/name/color-scheme",
+    "spec": "https://html.spec.whatwg.org/multipage/semantics.html#meta-color-scheme",
+    "caniuse": "https://caniuse.com/?search=color-scheme",
+    "originalCategory": "Links and metadata",
+    "categorySlug": "links-and-metadata"
+  },
+  {
+    "name": "iframe sandbox",
+    "slug": "iframe-sandbox",
+    "category": "Embedding and security",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "The iframe sandbox attribute is widely available and provides a browser-enforced restriction set for embedded content.",
+    "summary": "Put embedded documents in a restricted environment, then opt back into only the capabilities they need.",
+    "solves": "User-generated previews, third-party widgets, ad slots, and internal tools that should not inherit full page power.",
+    "syntax": "<iframe title=\"Preview\" src=\"/preview\" sandbox=\"allow-forms allow-scripts\"></iframe>",
+    "demo": "A user-content preview frame with explicit capability tokens instead of full trust.",
+    "usage": "Start with an empty sandbox, then add the smallest set of allow tokens that makes the embed work.",
+    "pitfalls": [
+      "allow-scripts plus allow-same-origin can let same-origin embeds remove sandboxing.",
+      "Sandboxing can break forms, popups, downloads, and storage unless allowed.",
+      "A permissive token list can become security theater."
+    ],
+    "accessibility": [
+      "Every iframe needs a useful title.",
+      "Embedded content still needs keyboard and screen reader support.",
+      "Provide a fallback or link when embedded content cannot load."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe",
+    "spec": "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox",
+    "caniuse": "https://caniuse.com/iframe-sandbox",
+    "originalCategory": "Embedding and security",
+    "categorySlug": "embedding-and-security"
+  },
+  {
+    "name": "iframe srcdoc",
+    "slug": "iframe-srcdoc",
+    "category": "Embedding and security",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "srcdoc is widely available for embedding inline HTML into an iframe, with security considerations for untrusted strings.",
+    "summary": "Create a self-contained iframe document from inline HTML markup.",
+    "solves": "Live previews, email template sandboxes, component docs, and generated snippets that should render in an isolated document.",
+    "syntax": "<iframe title=\"Email preview\" sandbox srcdoc=\"<h1>Receipt</h1><p>Total: $42</p>\"></iframe>",
+    "demo": "An email preview frame that renders generated markup without writing a temporary route.",
+    "usage": "Use with sandbox for untrusted or user-authored markup. Prefer TrustedHTML when assigning srcdoc from script in strict environments.",
+    "pitfalls": [
+      "Untrusted srcdoc content can still be dangerous without sandboxing.",
+      "Escaping inline HTML quickly becomes hard to read.",
+      "Large srcdoc documents are harder to cache than URL-based embeds."
+    ],
+    "accessibility": [
+      "Give the iframe a descriptive title.",
+      "Ensure the embedded document has meaningful headings.",
+      "Avoid trapping keyboard users inside preview frames."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe",
+    "spec": "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-srcdoc",
+    "caniuse": "https://caniuse.com/iframe-srcdoc",
+    "originalCategory": "Embedding and security",
+    "categorySlug": "embedding-and-security"
+  },
+  {
+    "name": "iframe credentialless",
+    "slug": "iframe-credentialless",
+    "category": "Embedding and security",
+    "maturity": "limited",
+    "status": "Limited availability",
+    "support": "credentialless iframes are experimental and currently best treated as a COEP-oriented progressive enhancement.",
+    "summary": "Load an iframe into an ephemeral context without the embedded origin's normal cookies, storage, or credentials.",
+    "solves": "COEP pages that need to embed third-party content that does not itself opt into cross-origin isolation.",
+    "syntax": "<iframe title=\"Partner widget\" src=\"https://partner.example/widget\" credentialless></iframe>",
+    "demo": "A cross-origin widget embed plan that separates credentialless isolation from classic sandboxing.",
+    "usage": "Use only when you understand the cross-origin isolation requirement and the embed can function without its normal credentials.",
+    "pitfalls": [
+      "The embedded page sees fresh ephemeral storage.",
+      "Login-dependent widgets may break.",
+      "Support is not broad enough for required functionality."
+    ],
+    "accessibility": [
+      "Provide a fallback link for unsupported browsers.",
+      "Keep the iframe title clear about the third-party content.",
+      "Do not hide critical workflow steps in an optional credentialless embed."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/credentialless",
+    "spec": "https://wicg.github.io/anonymous-iframe/",
+    "caniuse": "https://caniuse.com/?search=credentialless",
+    "originalCategory": "Embedding and security",
+    "categorySlug": "embedding-and-security"
   }
 ]

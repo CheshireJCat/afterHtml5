@@ -14,7 +14,7 @@ It is not an MDN mirror. Each feature page answers a narrower set of practical q
 
 - A VitePress documentation site generated from structured data.
 - English and Simplified Chinese routes with localized navigation, sidebars, feature pages, and demo copy.
-- 11 first-pass feature pages across native interaction, forms, semantics, Web Components, editing, and findability.
+- 30 feature pages across native interaction, forms, semantics, Web Components, editing, media, loading, metadata, embedding, and findability.
 - Purpose-built demos for each feature, such as:
   - `popover` as a top-layer command tray.
   - Invoker Commands as hydration-independent controls.
@@ -27,6 +27,10 @@ It is not an MDN mirror. Each feature page answers a narrower set of practical q
   - `inert` for true workspace lockout.
   - Customizable `<select>` / `<selectedcontent>` as a progressive enhancement.
   - `hidden="until-found"` for searchable collapsed reference content.
+  - Responsive images, native lazy loading, preload, modulepreload, and fetch priority for resource planning.
+  - Import maps and speculation rules for browser-owned module and navigation behavior.
+  - Form ownership, submitter overrides, datalist, constraint validation, and input hints for practical forms.
+  - iframe sandbox, srcdoc, and credentialless patterns for embedded content boundaries.
 
 ## Quick Start
 

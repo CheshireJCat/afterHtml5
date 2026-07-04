@@ -55,7 +55,12 @@
     "Editing": "编辑",
     "Forms": "表单",
     "Interaction safety": "交互安全",
-    "Findability": "可发现性"
+    "Findability": "可发现性",
+    "Media": "媒体",
+    "Loading and performance": "加载与性能",
+    "Scripts and navigation": "脚本与导航",
+    "Links and metadata": "链接与元数据",
+    "Embedding and security": "嵌入与安全"
   },
   "features": {
     "popover": {
@@ -254,6 +259,348 @@
         "提供一个普通的可见路径来展开同一内容。",
         "使用稳定的 fragment id。",
         "不要让搜索成为找到重要内容的唯一方式。"
+      ]
+    },
+    "responsive-images": {
+      "status": "Baseline 广泛可用",
+      "support": "picture、srcset 和 sizes 已经具备较好的跨浏览器互操作性；最终候选图取决于媒体查询、设备像素比、图片格式支持和布局。",
+      "summary": "让浏览器根据视口、像素密度和格式选择合适图片，而不是给所有设备都发一张过大的图。",
+      "solves": "适合需要按断点改变裁切、密集商品图和编辑型媒体内容的页面。",
+      "demo": "一个编辑型媒体位：清楚标出每个布局尺寸下浏览器可以选择哪些候选图。",
+      "usage": "弹性布局用 width descriptor 配合 sizes。只有裁切或格式要变时才用 picture，而不是只为了分辨率。",
+      "pitfalls": [
+        "错误的 sizes 会让浏览器选择过大的图片。",
+        "picture 仍然需要带有有效 alt 的 img fallback。",
+        "不要用艺术裁切在小屏上隐藏重要内容。"
+      ],
+      "accessibility": [
+        "alt 文本写在 img 元素上。",
+        "每个裁切版本都要保留同一语义。",
+        "能用真实文本时，不要把文字烘焙进响应式图片。"
+      ]
+    },
+    "native-lazy-loading": {
+      "status": "Baseline 广泛可用",
+      "support": "图片和 iframe 的原生 lazy loading 已广泛可用；具体提前加载距离由浏览器控制。",
+      "summary": "用一个属性延迟加载屏幕外图片和 iframe，不必为每个资源写滚动监听。",
+      "solves": "适合长内容页、图库、嵌入内容和文档页，让非关键媒体不与首屏资源抢带宽。",
+      "demo": "一个图库加载队列：区分首屏 eager 媒体和后续 lazy 媒体。",
+      "usage": "屏幕外媒体用 lazy。关键 hero 图保持 eager，并写明 width/height 避免布局偏移。",
+      "pitfalls": [
+        "首屏图片 lazy loading 可能损害感知性能。",
+        "浏览器决定 lazy 资源何时足够接近视口。",
+        "始终预留尺寸，避免未加载媒体造成内容跳动。"
+      ],
+      "accessibility": [
+        "保留有意义的 alt 和 iframe title。",
+        "理解页面所必需的内容不要 lazy。",
+        "不要用不可访问占位内容替代 lazy 媒体。"
+      ]
+    },
+    "fetch-priority": {
+      "status": "Baseline 2024",
+      "support": "fetchpriority 是 Baseline 新近可用能力；浏览器会把它当作优先级提示，而不是硬性调度命令。",
+      "summary": "直接在标记里告诉浏览器：同类资源中哪些应更高或更低优先级获取。",
+      "solves": "适合 hero 图、较晚发现的 preload 和低价值装饰资源的相对排序。",
+      "demo": "一个发布页资源看板：hero 图标为 high，装饰资源标为 low。",
+      "usage": "只在浏览器无法推断重要性的资源上谨慎使用。优先修正资源发现顺序，再加 priority hint。",
+      "pitfalls": [
+        "fetchpriority 不会让隐藏或很晚发现的资源神奇提前。",
+        "太多 high 会抵消信号。",
+        "优先级提示不是下载顺序保证。"
+      ],
+      "accessibility": [
+        "性能提示不应改变源码顺序或阅读顺序。",
+        "不要让装饰媒体优先于有意义内容。",
+        "fallback 和 alt 文本不应依赖优先级。"
+      ]
+    },
+    "preload-links": {
+      "status": "Baseline 广泛可用",
+      "support": "rel=preload 已广泛可用，用于在 head 中提前声明高确定性的关键资源。",
+      "summary": "在浏览器原本发现关键字体、图片或脚本之前就开始获取它们。",
+      "solves": "适合 CSS 中引用的关键资源、较晚出现的模板块，以及首屏必须更早到达的资产。",
+      "demo": "一个结账页 head 资源计划：区分应该 preload 的资源和普通资源。",
+      "usage": "只用于当前导航确实需要的资源。写对 as、type 和 crossorigin。",
+      "pitfalls": [
+        "预加载未使用资源会浪费带宽。",
+        "错误的 as 或 crossorigin 可能导致重复下载。",
+        "不要 preload 一切；浏览器本来就有调度器。"
+      ],
+      "accessibility": [
+        "Preload 应改善交付，而不改变语义顺序。",
+        "不要在等待预加载资源时隐藏有意义 fallback 文本。",
+        "优先加载能帮助用户阅读或操作页面的资源。"
+      ]
+    },
+    "modulepreload": {
+      "status": "Baseline 广泛可用",
+      "support": "modulepreload 在现代浏览器中广泛可用，可提前温热 JavaScript module graph。",
+      "summary": "把 ES module 预加载到 module map 中，让应用入口和依赖更早可用。",
+      "solves": "适合模块化应用，避免依赖图被一步一步发现。",
+      "demo": "一个 module graph 预热计划：展示 hydration 前哪些 import 应该已经可用。",
+      "usage": "用于当前页面一定会执行的重要 module 入口或 chunk。",
+      "pitfalls": [
+        "modulepreload 不是代码分割的替代品。",
+        "预加载陈旧或仅其他路由使用的 chunk 会浪费带宽。",
+        "跨域模块需要正确的 CORS 行为。"
+      ],
+      "accessibility": [
+        "核心可读内容不应依赖 module 预热才出现。",
+        "模块执行前的服务端渲染内容也要有意义。",
+        "避免把关键控制阻塞在非关键模块上。"
+      ]
+    },
+    "blocking-render": {
+      "status": "有限支持",
+      "support": "blocking 属性值得了解，但在支持成熟前应作为定向增强使用。",
+      "summary": "让动态插入的 script、style 或 stylesheet 明确阻塞渲染，直到资源准备好。",
+      "solves": "适合很小的关键 head 资源：虽然动态注入，但仍必须在首次绘制前生效。",
+      "demo": "一个首屏绘制检查表：区分阻塞渲染的主题代码和非关键增强。",
+      "usage": "只用于真正关键且很小的资源。大多数页面应优先使用解析器发现的普通 stylesheet。",
+      "pitfalls": [
+        "阻塞渲染会推迟首次绘制。",
+        "只有 head 中的资源可能影响渲染阻塞。",
+        "大型脚本或样式会让页面像卡住一样。"
+      ],
+      "accessibility": [
+        "不要为了纯装饰资源阻塞渲染。",
+        "增强失败时初始内容仍应可理解。",
+        "不要阻塞紧急或账户流程所需的控制。"
+      ]
+    },
+    "import-maps": {
+      "status": "Baseline 广泛可用",
+      "support": "Import maps 自 2023 年 3 月起已在现代浏览器中广泛可用。",
+      "summary": "直接在 HTML 中把裸 JavaScript module specifier 映射到 URL，不必靠 bundler 重写。",
+      "solves": "适合小应用、原型、设计系统和服务端渲染页面，让浏览器里的 import 更可读。",
+      "demo": "一个设计系统 import map：把稳定包名指向带版本的浏览器模块。",
+      "usage": "在依赖它的 module script 之前定义 import map。保持映射精简，并有意识地缓存模块 URL。",
+      "pitfalls": [
+        "Import map 是文档级的。",
+        "必须在依赖模块加载前解析。",
+        "大型 map 会变成需要版本控制的部署配置。"
+      ],
+      "accessibility": [
+        "不要让基础内容依赖纯客户端 import map。",
+        "保持 no-JS 渲染有意义。",
+        "开发阶段让模块错误清晰可见。"
+      ]
+    },
+    "speculation-rules": {
+      "status": "有限支持",
+      "support": "Speculation rules 还不是 Baseline；Chromium 系浏览器支持最好，应作为渐进增强使用。",
+      "summary": "声明可能发生的未来导航，让浏览器可以预取或预渲染整个文档。",
+      "solves": "适合多页应用、文档、电商流程和仪表盘中可预测的下一步导航。",
+      "demo": "一个文档导航计划：预取可能的下一页，同时避开会改变状态的路由。",
+      "usage": "只用于安全的 GET 导航。先从保守 prefetch 规则开始，再考虑 prerender。",
+      "pitfalls": [
+        "不要推测 logout、购物车变更或重 analytics 路由。",
+        "Prerender 可能比用户预期更早运行页面代码。",
+        "规则应尊重认证和隐私边界。"
+      ],
+      "accessibility": [
+        "推测加载不能在导航前改变焦点、播报内容或修改状态。",
+        "没有 speculation 支持时链接仍要可用。",
+        "避免在共享设备上预加载敏感页面。"
+      ]
+    },
+    "datalist": {
+      "status": "Baseline 广泛可用",
+      "support": "datalist 是长期存在的表单能力，不过弹出层渲染和过滤细节会因浏览器和输入类型不同而变化。",
+      "summary": "为 input 提供原生建议，同时仍允许用户输入建议列表外的值。",
+      "solves": "适合搜索框、机场代码、保存的筛选器和管理后台输入：建议有帮助，但不应限制用户。",
+      "demo": "一个航线规划输入框：建议机场代码，同时允许自定义包机停靠点。",
+      "usage": "当建议有帮助但不是唯一合法值时使用。必须从固定集合中选择时用 select。",
+      "pitfalls": [
+        "弹出层样式受限。",
+        "部分 input 类型的 datalist 支持并不均匀。",
+        "建议不是校验。"
+      ],
+      "accessibility": [
+        "为 input 保留可见 label。",
+        "不要只靠 placeholder 说明用途。",
+        "后端有约束时仍要校验自由输入值。"
+      ]
+    },
+    "form-attribute": {
+      "status": "Baseline 广泛可用",
+      "support": "form owner 属性已广泛支持，可以把控件关联到 DOM 祖先之外的 form。",
+      "summary": "通过 id 把控件关联到某个 form，即使布局上它们不在 form 元素内部。",
+      "solves": "适合 sticky 工具栏、分栏布局、表格和 modal：提交按钮或输入项无法包在 form 里。",
+      "demo": "一个分栏资料编辑器：sticky footer 按钮无需包裹整个布局也能提交表单。",
+      "usage": "当布局结构和表单归属需要分离时使用。用稳定 id 保持代码关系清晰。",
+      "pitfalls": [
+        "目标 form id 必须稳定且唯一。",
+        "并非所有自定义抽象都会正确透传 form 属性。",
+        "视觉分组不清时，用户可能误解控件归属。"
+      ],
+      "accessibility": [
+        "相关控件仍要在视觉上分组并标注。",
+        "提交按钮要说明提交的是哪个表单。",
+        "不要把控件分得太远，让键盘用户失去上下文。"
+      ]
+    },
+    "submitter-overrides": {
+      "status": "Baseline 广泛可用",
+      "support": "formaction、formmethod、formenctype、formtarget 和 formnovalidate 等提交按钮属性已广泛支持。",
+      "summary": "让单个提交按钮覆盖表单提交目的地和提交方式。",
+      "solves": "适合保存草稿、发布、预览、导出和危险确认：字段相同，但提交意图不同。",
+      "demo": "一个 CMS 操作栏：保存草稿跳过校验，发布保留完整校验。",
+      "usage": "当一组字段有多个合法提交目标或校验模式时使用。",
+      "pitfalls": [
+        "只有 submit button 能使用这些覆盖属性。",
+        "服务端路由仍要验证用户意图。",
+        "formnovalidate 不应用来绕过最终提交的必要检查。"
+      ],
+      "accessibility": [
+        "按钮标签必须说明结果。",
+        "不可逆操作前给出警告。",
+        "最终提交路径保留校验信息。"
+      ]
+    },
+    "constraint-validation": {
+      "status": "Baseline 广泛可用",
+      "support": "HTML constraint validation 已广泛支持，可为原生表单控件提供浏览器管理的 validity 状态。",
+      "summary": "在写自定义校验器前，先用 required、pattern、minlength、min、max、step 等原生约束。",
+      "solves": "适合需要即时原生校验反馈的表单，不必从零重建基础 validity 状态。",
+      "demo": "一个仓库设置表单：展示哪些约束属于原生校验，哪些仍是产品规则。",
+      "usage": "用原生约束处理语法和必填，再叠加产品特定校验。",
+      "pitfalls": [
+        "pattern 校验的是完整值，不是部分匹配。",
+        "原生提示因浏览器和语言环境不同而变化。",
+        "客户端校验永远不能替代服务端校验。"
+      ],
+      "accessibility": [
+        "错误信息要关联到字段。",
+        "不要只靠颜色表达 invalid 状态。",
+        "提交前保持说明可见。"
+      ]
+    },
+    "input-hints": {
+      "status": "Baseline 2021",
+      "support": "inputmode 和 enterkeyhint 已广泛可用，尤其适合虚拟键盘场景。",
+      "summary": "在不改变语义 input type 的情况下，提示合适的移动键盘和 Enter 键动作。",
+      "solves": "适合 OTP、价格、搜索和聊天输入：键盘体验重要，但校验语义应分开处理。",
+      "demo": "一个登录验证码表单：使用数字键盘提示和 one-time-code 自动填充。",
+      "usage": "inputmode 决定键盘形态，type 负责数据语义，autocomplete token 表达自动填充意图。",
+      "pitfalls": [
+        "inputmode 不会校验值。",
+        "虚拟键盘行为因平台不同而变化。",
+        "autocomplete token 必须匹配真实字段用途。"
+      ],
+      "accessibility": [
+        "保留可见 label 和说明。",
+        "不要禁用一次性验证码粘贴。",
+        "谨慎为个人数据使用 autocomplete。"
+      ]
+    },
+    "download-attribute": {
+      "status": "Baseline 广泛可用",
+      "support": "download 属性已广泛可用，但同源限制和浏览器策略会影响它是否被采纳。",
+      "summary": "不写 JavaScript，就能把链接标记为下载并建议文件名。",
+      "solves": "适合导出按钮、生成报表、发票、CSV 模板和本地 Blob 下载。",
+      "demo": "一个报表导出链接：明确命名文件，并让导航行为清晰。",
+      "usage": "用于同源文件或生成的 Blob URL，并且用户意图确实是下载。",
+      "pitfalls": [
+        "跨域下载可能忽略建议文件名。",
+        "浏览器可能调整非法文件名。",
+        "download 是提示，不是权限绕过。"
+      ],
+      "accessibility": [
+        "链接文本说明会下载什么文件类型或结果。",
+        "文件较大时展示大小。",
+        "不要让普通导航链接意外触发下载。"
+      ]
+    },
+    "theme-color": {
+      "status": "有限支持",
+      "support": "theme-color 对浏览器 chrome 和安装体验很有用，但支持和具体 UI 效果因浏览器和平台而异。",
+      "summary": "用 meta 标签建议浏览器或外围 UI 的颜色，并可用 media query 区分主题。",
+      "solves": "适合移动浏览器 chrome、安装式 Web App 细节，以及页面画布外的明暗品牌一致性。",
+      "demo": "一个品牌 chrome 调色板：把页面主题 token 与浏览器 UI theme-color 标签配对。",
+      "usage": "在 head 中使用一个或多个 meta 标签。页面支持多套颜色时配合 media query。",
+      "pitfalls": [
+        "部分桌面浏览器会解析但不明显使用。",
+        "平台 UI 可能覆盖或转换颜色。",
+        "如果用户可切换主题，标签也应随之更新。"
+      ],
+      "accessibility": [
+        "在适用平台上选择与浏览器 UI 图标有足够对比度的颜色。",
+        "页面内容对比度不要依赖浏览器 chrome。",
+        "不要把 chrome 颜色作为唯一状态指示。"
+      ]
+    },
+    "color-scheme-meta": {
+      "status": "Baseline 广泛可用",
+      "support": "meta name=color-scheme 已广泛支持，并会影响浏览器原生控件、滚动条和默认颜色。",
+      "summary": "在 CSS 完全加载前告诉浏览器：文档支持哪些颜色方案。",
+      "solves": "适合深色模式页面，让原生控件和 UA 表面不要闪成错误方案。",
+      "demo": "一个设置页 head 片段：让原生控件与页面明暗模式保持一致。",
+      "usage": "整个文档支持 light、dark 或两者时放在 head 中；组件级控制可配合 CSS color-scheme。",
+      "pitfalls": [
+        "它本身不会创建完整主题。",
+        "声明偏好时顺序有意义。",
+        "嵌入内容可能有自己的 scheme。"
+      ],
+      "accessibility": [
+        "尊重用户颜色方案偏好。",
+        "两种方案都要保持对比度。",
+        "测试原生控件、滚动条和选中文本颜色。"
+      ]
+    },
+    "iframe-sandbox": {
+      "status": "Baseline 广泛可用",
+      "support": "iframe sandbox 属性已广泛可用，可为嵌入内容提供浏览器强制的限制集合。",
+      "summary": "把嵌入文档放进受限环境，再只放开它真正需要的能力。",
+      "solves": "适合用户生成预览、第三方 widget、广告位和内部工具，避免它们继承完整页面能力。",
+      "demo": "一个用户内容预览 frame：显式列出 capability token，而不是完全信任。",
+      "usage": "从空 sandbox 开始，再加入让嵌入内容工作所需的最小 allow token。",
+      "pitfalls": [
+        "allow-scripts 加 allow-same-origin 可能让同源嵌入移除 sandbox。",
+        "除非允许，否则 sandbox 会破坏表单、弹窗、下载和存储。",
+        "过宽的 token 列表会变成安全表演。"
+      ],
+      "accessibility": [
+        "每个 iframe 都需要有用的 title。",
+        "嵌入内容仍需要键盘和屏幕阅读器支持。",
+        "内容无法加载时提供 fallback 或链接。"
+      ]
+    },
+    "iframe-srcdoc": {
+      "status": "Baseline 广泛可用",
+      "support": "srcdoc 已广泛可用，可把内联 HTML 嵌入 iframe；不可信字符串需要额外安全处理。",
+      "summary": "用内联 HTML 标记创建一个自包含 iframe 文档。",
+      "solves": "适合实时预览、邮件模板 sandbox、组件文档和生成代码片段，不必写临时路由。",
+      "demo": "一个邮件预览 frame：渲染生成标记，而不用创建临时页面。",
+      "usage": "对不可信或用户编写的标记配合 sandbox 使用。在严格环境中从脚本赋值时优先使用 TrustedHTML。",
+      "pitfalls": [
+        "没有 sandbox 的不可信 srcdoc 内容仍然危险。",
+        "内联 HTML 转义很快会变得难读。",
+        "大型 srcdoc 文档比 URL 嵌入更难缓存。"
+      ],
+      "accessibility": [
+        "给 iframe 一个描述性 title。",
+        "嵌入文档内部也要有有意义的标题。",
+        "避免让键盘用户困在预览 frame 中。"
+      ]
+    },
+    "iframe-credentialless": {
+      "status": "有限支持",
+      "support": "credentialless iframe 仍属实验能力，目前更适合作为 COEP 场景的渐进增强。",
+      "summary": "把 iframe 加载到临时上下文中，不带嵌入源平常的 cookies、storage 或凭据。",
+      "solves": "适合需要跨源隔离的 COEP 页面嵌入未设置 COEP 的第三方内容。",
+      "demo": "一个跨源 widget 嵌入计划：区分 credentialless 隔离和传统 sandbox。",
+      "usage": "只有理解 cross-origin isolation 需求，并且嵌入内容不依赖常规凭据时再使用。",
+      "pitfalls": [
+        "嵌入页面看到的是全新的临时存储。",
+        "依赖登录的 widget 可能失效。",
+        "支持面不足以承载必需功能。"
+      ],
+      "accessibility": [
+        "为不支持的浏览器提供 fallback 链接。",
+        "iframe title 清楚说明第三方内容。",
+        "不要把关键流程步骤藏在可选 credentialless embed 中。"
       ]
     }
   }

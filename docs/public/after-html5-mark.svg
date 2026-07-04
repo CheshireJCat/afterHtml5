@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">After HTML5 mark</title>
+  <desc id="desc">A geometric mark combining angle brackets and the number five.</desc>
+  <rect width="128" height="128" rx="24" fill="#0f172a"/>
+  <path d="M44 33 20 64l24 31" fill="none" stroke="#93c5fd" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M84 33 108 64 84 95" fill="none" stroke="#60a5fa" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M58 35h34M58 35l-5 28h24c13 0 22 8 22 20 0 13-10 22-25 22-10 0-19-4-25-10" fill="none" stroke="#f8fafc" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

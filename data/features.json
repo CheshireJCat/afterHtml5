@@ -1,0 +1,288 @@
+[
+  {
+    "name": "Popover",
+    "slug": "popover",
+    "category": "Native interaction",
+    "maturity": "baseline",
+    "status": "Baseline newly available",
+    "support": "The global attribute is broadly interoperable; the related API surface continues to gain refinements.",
+    "summary": "Build top-layer menus, teaching bubbles, and non-modal floating panels without owning z-index, outside-click, or escape-key behavior yourself.",
+    "solves": "Layered UI that needs light dismiss and top-layer placement, but does not need to make the rest of the page inert.",
+    "syntax": "<button popovertarget=\"quick-actions\">Actions</button>\n<div id=\"quick-actions\" popover>...</div>",
+    "demo": "A command tray that opens with one attribute and can be dismissed by clicking outside or pressing Esc.",
+    "usage": "Use for small transient surfaces: menus, quick actions, hints, onboarding notes, and tool palettes. Use dialog when the task must block the page.",
+    "pitfalls": [
+      "Popover does not provide dialog semantics by itself.",
+      "Choose auto, hint, or manual based on whether light dismiss and one-at-a-time behavior are desired.",
+      "Positioning still needs CSS; the top layer only solves stacking."
+    ],
+    "accessibility": [
+      "Use meaningful buttons as invokers.",
+      "Add semantic roles only when the content actually behaves like a menu, tooltip, or note.",
+      "Do not put required workflow steps in a light-dismissible popover."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover",
+    "spec": "https://html.spec.whatwg.org/multipage/popover.html",
+    "caniuse": "https://caniuse.com/?search=popover"
+  },
+  {
+    "name": "Invoker Commands",
+    "slug": "invoker-commands",
+    "category": "Native interaction",
+    "maturity": "baseline",
+    "status": "Baseline 2025",
+    "support": "Newly available across the core Baseline browser set since late 2025.",
+    "summary": "Let buttons declaratively command popovers, dialogs, and custom command handlers without waiting for app JavaScript to wire click listeners.",
+    "solves": "HTML-first controls for common show, hide, toggle, and close behaviors.",
+    "syntax": "<button commandfor=\"panel\" command=\"toggle-popover\">Toggle</button>\n<div id=\"panel\" popover>...</div>",
+    "demo": "A toolbar where buttons control a popover and a dialog through command attributes rather than click handlers.",
+    "usage": "Use as progressive enhancement for built-in interactive elements, especially where initial interactivity matters before framework hydration.",
+    "pitfalls": [
+      "Only buttons are invokers.",
+      "Built-in commands are intentionally limited.",
+      "Framework abstractions may need updates before they pass through the attributes cleanly."
+    ],
+    "accessibility": [
+      "Keep the invoker a real button.",
+      "Use visible labels; do not rely on icon-only commands.",
+      "Provide JS fallback only when your support target needs it."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API",
+    "spec": "https://html.spec.whatwg.org/multipage/form-elements.html#attr-button-commandfor",
+    "caniuse": "https://caniuse.com/?search=commandfor"
+  },
+  {
+    "name": "Dialog requestClose",
+    "slug": "dialog-request-close",
+    "category": "Native interaction",
+    "maturity": "baseline",
+    "status": "Baseline 2025",
+    "support": "The dialog element is mature; requestClose is newly available and gives cancellable close behavior.",
+    "summary": "Use native modal behavior, return values, form method=dialog, and cancellable close requests without recreating focus management.",
+    "solves": "Confirmation flows and modal forms that need platform-level focus handling plus an explicit result.",
+    "syntax": "<dialog id=\"confirm\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"ship\">Ship</button>\n  </form>\n</dialog>",
+    "demo": "A shipping confirmation dialog that returns the selected action and can intercept risky close attempts.",
+    "usage": "Use for modal tasks, confirmations, and short forms. Pair with form method=dialog for zero-boilerplate button return values.",
+    "pitfalls": [
+      "showModal() is imperative; you still need a tiny trigger unless using invoker commands.",
+      "requestClose() can be cancelled, close() cannot.",
+      "Backdrop click behavior depends on newer closedby support and should be treated as an enhancement."
+    ],
+    "accessibility": [
+      "Give every dialog a visible heading.",
+      "Provide an obvious close or cancel path.",
+      "Avoid nesting complex app navigation inside a modal."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/requestClose",
+    "spec": "https://html.spec.whatwg.org/multipage/interactive-elements.html#dom-dialog-requestclose",
+    "caniuse": "https://caniuse.com/?search=requestClose"
+  },
+  {
+    "name": "Exclusive details",
+    "slug": "exclusive-details",
+    "category": "Native interaction",
+    "maturity": "modern",
+    "status": "Modern HTML",
+    "support": "Supported in modern browsers as the name attribute on grouped details elements.",
+    "summary": "Turn a group of details elements into a native exclusive accordion by giving them the same name.",
+    "solves": "FAQ, settings, and comparison sections where only one disclosure should be open at a time.",
+    "syntax": "<details name=\"shipping\">\n  <summary>Delivery windows</summary>\n  ...\n</details>",
+    "demo": "A delivery options accordion with one open panel and no JavaScript state management.",
+    "usage": "Use when the content is genuinely disclosure content, not tabs or app navigation.",
+    "pitfalls": [
+      "details is not a tab widget.",
+      "Only use exclusive behavior when closing the previous panel will not cause data loss.",
+      "Custom summary styling must keep focus and expanded state visible."
+    ],
+    "accessibility": [
+      "Keep summary text clear and action-oriented.",
+      "Do not remove default keyboard behavior.",
+      "Avoid putting large forms inside summary."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/blog/html-details-exclusive-accordions/",
+    "spec": "https://html.spec.whatwg.org/multipage/interactive-elements.html#the-details-element",
+    "caniuse": "https://caniuse.com/?search=details%20name"
+  },
+  {
+    "name": "Search element",
+    "slug": "search-element",
+    "category": "Semantics",
+    "maturity": "baseline",
+    "status": "Baseline 2023",
+    "support": "The search element is available across modern browsers and maps to a search landmark.",
+    "summary": "Represent site, page, or app search with a dedicated landmark instead of repeating role=search on generic containers.",
+    "solves": "Search UI semantics for screen readers and document structure.",
+    "syntax": "<search>\n  <form action=\"/search\">\n    <label for=\"q\">Search docs</label>\n    <input id=\"q\" name=\"q\" type=\"search\">\n  </form>\n</search>",
+    "demo": "A feature filter that uses search semantics and keeps results outside the search landmark.",
+    "usage": "Use around the controls that perform search or filtering, not around the search results.",
+    "pitfalls": [
+      "The element does not implement search logic.",
+      "Results should remain in the main content, not inside search.",
+      "Do not nest multiple search landmarks without clear labels."
+    ],
+    "accessibility": [
+      "Keep visible labels for fields.",
+      "Name multiple search landmarks with aria-label.",
+      "Use type=search for query fields."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/search",
+    "spec": "https://html.spec.whatwg.org/multipage/grouping-content.html#the-search-element",
+    "caniuse": "https://caniuse.com/?search=search%20element"
+  },
+  {
+    "name": "Declarative Shadow DOM",
+    "slug": "declarative-shadow-dom",
+    "category": "Web Components",
+    "maturity": "baseline",
+    "status": "Baseline 2024",
+    "support": "Baseline newly available since 2024 with the standardized shadowrootmode attribute.",
+    "summary": "Ship scoped component markup from the server by declaring a shadow root directly in HTML.",
+    "solves": "Server-rendered Web Components that need style encapsulation before JavaScript upgrades.",
+    "syntax": "<user-card>\n  <template shadowrootmode=\"open\">\n    <style>...</style>\n    <slot></slot>\n  </template>\n  Ada Lovelace\n</user-card>",
+    "demo": "An iframe-parsed server-rendered profile badge whose shadow styles do not leak into the page.",
+    "usage": "Use when a component needs SSR, streaming, or static HTML output but still benefits from shadow DOM boundaries.",
+    "pitfalls": [
+      "The shadowrootmode template is parser-only; setting it later with innerHTML does not attach a shadow root.",
+      "Older examples may use the removed shadowroot attribute.",
+      "Hydrating custom elements must check for an existing shadow root."
+    ],
+    "accessibility": [
+      "Keep light DOM content meaningful before upgrade.",
+      "Do not hide essential text inside inaccessible custom control internals.",
+      "Use slots deliberately so reading order remains sensible."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM",
+    "spec": "https://html.spec.whatwg.org/multipage/scripting.html#attr-template-shadowrootmode",
+    "caniuse": "https://caniuse.com/?search=declarative%20shadow%20dom"
+  },
+  {
+    "name": "Plaintext-only editing",
+    "slug": "plaintext-only",
+    "category": "Editing",
+    "maturity": "baseline",
+    "status": "Baseline 2025",
+    "support": "Baseline newly available since March 2025.",
+    "summary": "Make an element editable while forcing pasted and edited content to remain plain text.",
+    "solves": "Comment boxes, command inputs, note fields, and token editors that need contenteditable ergonomics without rich-text paste cleanup.",
+    "syntax": "<div contenteditable=\"plaintext-only\">Paste formatted text here</div>",
+    "demo": "A release-note scratchpad that shows the raw HTML stays plain while the editable surface remains flexible.",
+    "usage": "Use when textarea is too restrictive but rich content would create sanitization and formatting problems.",
+    "pitfalls": [
+      "It is not a complete form control by itself.",
+      "You still need validation, persistence, and submission logic.",
+      "Line breaks and whitespace need product-specific handling."
+    ],
+    "accessibility": [
+      "Give the editable region a label.",
+      "Expose role=textbox and aria-multiline when appropriate.",
+      "Preserve focus styling."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/contenteditable",
+    "spec": "https://html.spec.whatwg.org/multipage/interaction.html#attr-contenteditable",
+    "caniuse": "https://caniuse.com/?search=contenteditable%20plaintext-only"
+  },
+  {
+    "name": "showPicker",
+    "slug": "show-picker",
+    "category": "Forms",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "Available across modern browsers for input pickers since 2022, with select.showPicker still more limited.",
+    "summary": "Open native date, color, file, and related browser pickers from your own visible control without rebuilding the picker UI.",
+    "solves": "Design-friendly trigger buttons that still use platform-native input pickers.",
+    "syntax": "<input id=\"date\" type=\"date\">\n<button onclick=\"date.showPicker()\">Choose date</button>",
+    "demo": "A travel form with custom trigger buttons that open real browser pickers.",
+    "usage": "Use when your layout needs a separate trigger but the actual picker should remain native.",
+    "pitfalls": [
+      "The method must usually run from a user activation such as a click.",
+      "Support varies by input type and platform.",
+      "Do not fake picker contents; let the browser own that part."
+    ],
+    "accessibility": [
+      "Keep the real input in the tab order unless there is a strong reason not to.",
+      "Connect labels to inputs.",
+      "Mirror chosen values in readable text when using compact controls."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/showPicker",
+    "spec": "https://html.spec.whatwg.org/multipage/input.html#dom-input-showpicker",
+    "caniuse": "https://caniuse.com/mdn-api_htmlinputelement_showpicker"
+  },
+  {
+    "name": "inert",
+    "slug": "inert",
+    "category": "Interaction safety",
+    "maturity": "widely",
+    "status": "Baseline widely available",
+    "support": "Widely available in the modern core browser set.",
+    "summary": "Mark a subtree as non-interactive so it cannot be clicked, focused, selected, or reached by assistive technology.",
+    "solves": "Disabled page regions behind overlays, preview panes, inactive steps, and temporary UI locks.",
+    "syntax": "<main inert>Temporarily disabled content</main>",
+    "demo": "A settings workspace where the background becomes truly unavailable while a review layer is active.",
+    "usage": "Use when a whole region should be unavailable, not merely visually dimmed.",
+    "pitfalls": [
+      "inert removes interactivity from descendants, including links and form controls.",
+      "Do not inert content that remains necessary to finish the task.",
+      "Visual dimming is separate; add CSS to make the state obvious."
+    ],
+    "accessibility": [
+      "Pair inert with a clear active region.",
+      "Move focus intentionally when enabling an overlay.",
+      "Restore focus when leaving the inert state."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inert",
+    "spec": "https://html.spec.whatwg.org/multipage/interaction.html#the-inert-attribute",
+    "caniuse": "https://caniuse.com/mdn-html_global_attributes_inert"
+  },
+  {
+    "name": "Customizable select",
+    "slug": "customizable-select",
+    "category": "Forms",
+    "maturity": "limited",
+    "status": "Limited availability",
+    "support": "Experimental and not Baseline; useful to learn now as a progressive enhancement.",
+    "summary": "Style native select internals with HTML and CSS hooks such as button, selectedcontent, ::picker(select), and appearance: base-select.",
+    "solves": "Rich option displays that preserve native select behavior instead of replacing it with ARIA-heavy custom widgets.",
+    "syntax": "<select>\n  <button><selectedcontent></selectedcontent></button>\n  <option>Express</option>\n</select>",
+    "demo": "A shipping method picker whose selected value and dropdown rows can carry structured content.",
+    "usage": "Use experimentally or behind progressive enhancement checks; classic select fallback remains important.",
+    "pitfalls": [
+      "Not Baseline yet.",
+      "Framework hydration may disagree with browser-managed selectedcontent cloning.",
+      "Dynamic option updates may not automatically re-clone selectedcontent."
+    ],
+    "accessibility": [
+      "Do not use it for split buttons or unrelated composite controls.",
+      "Keep option text meaningful without decoration.",
+      "Confirm keyboard behavior in every target browser."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/selectedcontent",
+    "spec": "https://html.spec.whatwg.org/multipage/form-elements.html#the-selectedcontent-element",
+    "caniuse": "https://caniuse.com/mdn-html_elements_selectedcontent"
+  },
+  {
+    "name": "hidden until found",
+    "slug": "hidden-until-found",
+    "category": "Findability",
+    "maturity": "limited",
+    "status": "Limited availability",
+    "support": "Available in several modern browsers but not Baseline.",
+    "summary": "Keep content collapsed while allowing find-in-page and URL fragments to reveal it automatically.",
+    "solves": "Large reference pages, archived sections, and dense docs where hidden content should still be discoverable.",
+    "syntax": "<section id=\"billing-note\" hidden=\"until-found\">...</section>",
+    "demo": "A compressed changelog section that reveals itself when navigated to by fragment.",
+    "usage": "Use for non-critical collapsed content that still needs browser search and deep-link discovery.",
+    "pitfalls": [
+      "Not all browsers reveal until-found content.",
+      "The element still participates in layout with containment behavior in supporting browsers.",
+      "Do not hide primary navigation or required form fields this way."
+    ],
+    "accessibility": [
+      "Provide a normal visible path to reveal the same content.",
+      "Use stable fragment ids.",
+      "Avoid making search the only way to find important information."
+    ],
+    "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden",
+    "spec": "https://html.spec.whatwg.org/multipage/interaction.html#the-hidden-attribute",
+    "caniuse": "https://caniuse.com/mdn-html_global_attributes_hidden_until-found"
+  }
+]

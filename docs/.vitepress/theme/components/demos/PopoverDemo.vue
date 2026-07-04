@@ -1,33 +1,77 @@
+<script setup>
+import { computed } from 'vue';
+import { useLocale } from '../useLocale';
+
+const { isZh, text } = useLocale();
+
+const copy = computed(() =>
+  isZh.value
+    ? {
+        workspace: '订单工作区',
+        open: '打开操作',
+        recentOrders: '最近订单',
+        order1024: '订单 1024',
+        packed: '已打包',
+        order1025: '订单 1025',
+        review: '需要核对地址',
+        order1026: '订单 1026',
+        ready: '待发货',
+        quickActions: '快捷操作',
+        print: '打印装箱单',
+        returnLabel: '创建退货标签',
+        tracking: '复制物流摘要',
+        dismiss: '点击外部或按 Esc 关闭。轻量关闭行为由浏览器处理。',
+        notice:
+          'Popover 会进入 top layer，不会被父级 overflow 或 z-index 困住。打开关系由 HTML 属性声明。',
+      }
+    : {
+        workspace: 'Orders workspace',
+        open: 'Open actions',
+        recentOrders: 'Recent orders',
+        order1024: 'Order 1024',
+        packed: 'Packed',
+        order1025: 'Order 1025',
+        review: 'Needs address review',
+        order1026: 'Order 1026',
+        ready: 'Ready to ship',
+        quickActions: 'Quick actions',
+        print: 'Print packing slip',
+        returnLabel: 'Create return label',
+        tracking: 'Copy tracking summary',
+        dismiss: 'Click outside or press Esc. The browser handles the light-dismiss behavior.',
+        notice:
+          'The popover jumps into the top layer and is not trapped by parent overflow or z-index. The HTML attribute owns the opening relationship.',
+      },
+);
+</script>
+
 <template>
   <div class="demo-two-col">
     <div class="demo-panel command-surface">
       <div class="command-header">
-        <strong>Orders workspace</strong>
-        <button class="demo-button primary" popovertarget="quick-actions">Open actions</button>
+        <strong>{{ copy.workspace }}</strong>
+        <button class="demo-button primary" popovertarget="quick-actions">{{ copy.open }}</button>
       </div>
-      <div class="order-list" aria-label="Recent orders">
-        <span>Order 1024</span>
-        <span>Packed</span>
-        <span>Order 1025</span>
-        <span>Needs address review</span>
-        <span>Order 1026</span>
-        <span>Ready to ship</span>
+      <div class="order-list" :aria-label="copy.recentOrders">
+        <span>{{ copy.order1024 }}</span>
+        <span>{{ copy.packed }}</span>
+        <span>{{ copy.order1025 }}</span>
+        <span>{{ copy.review }}</span>
+        <span>{{ copy.order1026 }}</span>
+        <span>{{ copy.ready }}</span>
       </div>
       <div id="quick-actions" class="quick-actions" popover>
-        <strong>Quick actions</strong>
-        <button type="button">Print packing slip</button>
-        <button type="button">Create return label</button>
-        <button type="button">Copy tracking summary</button>
-        <p>Click outside or press Esc. The browser handles the light-dismiss behavior.</p>
+        <strong>{{ copy.quickActions }}</strong>
+        <button type="button">{{ copy.print }}</button>
+        <button type="button">{{ copy.returnLabel }}</button>
+        <button type="button">{{ copy.tracking }}</button>
+        <p>{{ copy.dismiss }}</p>
       </div>
     </div>
 
     <div class="demo-panel">
-      <h3>What to notice</h3>
-      <p>
-        The popover jumps into the top layer and is not trapped by parent overflow or z-index.
-        The HTML attribute owns the opening relationship.
-      </p>
+      <h3>{{ text.demo.notice }}</h3>
+      <p>{{ copy.notice }}</p>
       <pre class="demo-code"><code>&lt;button popovertarget="quick-actions"&gt;
   Open actions
 &lt;/button&gt;

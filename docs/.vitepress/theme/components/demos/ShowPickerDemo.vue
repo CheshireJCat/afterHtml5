@@ -1,17 +1,61 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useLocale } from '../useLocale';
+
+const { isZh, text } = useLocale();
+
+const copy = computed(() =>
+  isZh.value
+    ? {
+        choose: '选择一个原生 picker。',
+        dateLabel: '出行日期',
+        colorLabel: '标签颜色',
+        fileLabel: '票据文件',
+        datePicker: '日期',
+        colorPicker: '颜色',
+        filePicker: '文件',
+        openDate: '打开日期 picker',
+        openColor: '打开颜色 picker',
+        openFile: '打开文件 picker',
+        opened: (label) => `${label} picker 已由 showPicker() 打开。`,
+        unsupported: (label) => `这个浏览器没有暴露 ${label} picker 的 showPicker()。`,
+        selectedFile: (name) => `已选择文件：${name}`,
+        noFile: '未选择文件。',
+        value: (label, value) => `${label}：${value || '空'}`,
+        notice: '你的按钮可以匹配产品布局，而实际 picker 仍然保持原生、平台相关。',
+      }
+    : {
+        choose: 'Choose a native picker.',
+        dateLabel: 'Trip date',
+        colorLabel: 'Tag color',
+        fileLabel: 'Receipt file',
+        datePicker: 'Date',
+        colorPicker: 'Color',
+        filePicker: 'File',
+        openDate: 'Open date picker',
+        openColor: 'Open color picker',
+        openFile: 'Open file picker',
+        opened: (label) => `${label} picker opened by showPicker().`,
+        unsupported: (label) => `${label} picker does not expose showPicker() in this browser.`,
+        selectedFile: (name) => `Selected file: ${name}`,
+        noFile: 'No file selected.',
+        value: (label, value) => `${label}: ${value || 'empty'}`,
+        notice: 'Your button can match the layout, while the actual picker stays native and platform-specific.',
+      },
+);
 
 const dateInput = ref(null);
 const colorInput = ref(null);
 const fileInput = ref(null);
-const status = ref('Choose a native picker.');
+const status = ref('');
+const statusText = computed(() => status.value || copy.value.choose);
 
 const openPicker = (input, label) => {
   if (input?.showPicker) {
     input.showPicker();
-    status.value = `${label} picker opened by showPicker().`;
+    status.value = copy.value.opened(label);
   } else {
-    status.value = `${label} picker does not expose showPicker() in this browser.`;
+    status.value = copy.value.unsupported(label);
     input?.focus();
   }
 };
@@ -19,41 +63,41 @@ const openPicker = (input, label) => {
 const updateStatus = (event, label) => {
   if (event.target.type === 'file') {
     status.value = event.target.files?.[0]?.name
-      ? `Selected file: ${event.target.files[0].name}`
-      : 'No file selected.';
+      ? copy.value.selectedFile(event.target.files[0].name)
+      : copy.value.noFile;
     return;
   }
-  status.value = `${label}: ${event.target.value || 'empty'}`;
+  status.value = copy.value.value(label, event.target.value);
 };
 </script>
 
 <template>
   <div class="demo-two-col">
     <div class="demo-panel picker-board">
-      <p class="demo-note">{{ status }}</p>
+      <p class="demo-note">{{ statusText }}</p>
 
       <div class="picker-row">
-        <label for="trip-date">Trip date</label>
-        <input id="trip-date" ref="dateInput" type="date" @change="updateStatus($event, 'Trip date')" />
-        <button class="demo-button" type="button" @click="openPicker(dateInput, 'Date')">Open date picker</button>
+        <label for="trip-date">{{ copy.dateLabel }}</label>
+        <input id="trip-date" ref="dateInput" type="date" @change="updateStatus($event, copy.dateLabel)" />
+        <button class="demo-button" type="button" @click="openPicker(dateInput, copy.datePicker)">{{ copy.openDate }}</button>
       </div>
 
       <div class="picker-row">
-        <label for="tag-color">Tag color</label>
-        <input id="tag-color" ref="colorInput" type="color" value="#2563eb" @change="updateStatus($event, 'Tag color')" />
-        <button class="demo-button" type="button" @click="openPicker(colorInput, 'Color')">Open color picker</button>
+        <label for="tag-color">{{ copy.colorLabel }}</label>
+        <input id="tag-color" ref="colorInput" type="color" value="#2563eb" @change="updateStatus($event, copy.colorLabel)" />
+        <button class="demo-button" type="button" @click="openPicker(colorInput, copy.colorPicker)">{{ copy.openColor }}</button>
       </div>
 
       <div class="picker-row">
-        <label for="receipt-file">Receipt file</label>
-        <input id="receipt-file" ref="fileInput" type="file" @change="updateStatus($event, 'Receipt')" />
-        <button class="demo-button" type="button" @click="openPicker(fileInput, 'File')">Open file picker</button>
+        <label for="receipt-file">{{ copy.fileLabel }}</label>
+        <input id="receipt-file" ref="fileInput" type="file" @change="updateStatus($event, copy.fileLabel)" />
+        <button class="demo-button" type="button" @click="openPicker(fileInput, copy.filePicker)">{{ copy.openFile }}</button>
       </div>
     </div>
 
     <div class="demo-panel">
-      <h3>What to notice</h3>
-      <p>Your button can match the layout, while the actual picker stays native and platform-specific.</p>
+      <h3>{{ text.demo.notice }}</h3>
+      <p>{{ copy.notice }}</p>
       <pre class="demo-code"><code>const input = document.querySelector('input[type="date"]');
 input.showPicker();</code></pre>
     </div>

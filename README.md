@@ -13,6 +13,7 @@ It is not an MDN mirror. Each feature page answers a narrower set of practical q
 ## What Is Included
 
 - A VitePress documentation site generated from structured data.
+- English and Simplified Chinese routes with localized navigation, sidebars, feature pages, and demo copy.
 - 11 first-pass feature pages across native interaction, forms, semantics, Web Components, editing, and findability.
 - Purpose-built demos for each feature, such as:
   - `popover` as a top-layer command tray.
@@ -48,12 +49,20 @@ npm run docs:preview
 - `docs:build`: regenerates docs and builds the static site.
 - `docs:preview`: previews the built site locally.
 
+## Language Routes
+
+- English: `/`
+- Simplified Chinese: `/zh/`
+- English feature pages: `/features/<slug>`
+- Chinese feature pages: `/zh/features/<slug>`
+
 ## Project Structure
 
 ```text
 .
 |-- data/
-|   `-- features.json              # Structured source of HTML capability data
+|   |-- features.json              # Structured source of HTML capability data
+|   `-- zh.json                    # Chinese labels and feature translations
 |-- docs/
 |   |-- .vitepress/
 |   |   |-- config.mjs             # VitePress config
@@ -61,8 +70,9 @@ npm run docs:preview
 |   |   `-- theme/
 |   |       |-- components/         # Home, index, demo components
 |   |       `-- style.css          # Site design tokens and global UI
-|   |-- features/                  # Generated feature pages
-|   `-- index.md                   # Generated homepage
+|   |-- features/                  # Generated English feature pages
+|   |-- zh/                        # Generated Simplified Chinese pages
+|   `-- index.md                   # Generated English homepage
 |-- scripts/
 |   `-- generate-docs.mjs          # Data-to-Markdown generator
 `-- .github/workflows/
@@ -71,7 +81,8 @@ npm run docs:preview
 
 ## Content Model
 
-The source of truth is `data/features.json`. Each feature includes:
+The source of truth is `data/features.json`. Chinese UI labels and feature translations live in `data/zh.json`.
+Each feature includes:
 
 - `name`, `slug`, `category`
 - `maturity`, `status`, `support`
@@ -101,6 +112,7 @@ The site is configured for GitHub Pages at:
 
 ```text
 https://cheshirejcat.github.io/afterHtml5/
+https://cheshirejcat.github.io/afterHtml5/zh/
 ```
 
 Repository Pages settings should use:

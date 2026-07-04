@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import features from '../../generated/features.json';
+import { useLocale } from './useLocale';
 import PopoverDemo from './demos/PopoverDemo.vue';
 import InvokerCommandsDemo from './demos/InvokerCommandsDemo.vue';
 import DialogRequestCloseDemo from './demos/DialogRequestCloseDemo.vue';
@@ -20,6 +20,8 @@ const props = defineProps({
   },
 });
 
+const { features, text } = useLocale();
+
 const components = {
   popover: PopoverDemo,
   'invoker-commands': InvokerCommandsDemo,
@@ -34,7 +36,7 @@ const components = {
   'hidden-until-found': HiddenUntilFoundDemo,
 };
 
-const feature = computed(() => features.find((item) => item.slug === props.slug));
+const feature = computed(() => features.value.find((item) => item.slug === props.slug));
 const demoComponent = computed(() => components[props.slug]);
 </script>
 
@@ -42,12 +44,12 @@ const demoComponent = computed(() => components[props.slug]);
   <section v-if="feature" class="ah5-demo-wrap">
     <div class="ah5-demo-heading">
       <span class="ah5-status" :data-maturity="feature.maturity">{{ feature.status }}</span>
-      <h2>Demo: {{ feature.demo }}</h2>
+      <h2>{{ text.demo.label }}: {{ feature.demo }}</h2>
       <p>{{ feature.support }}</p>
     </div>
     <div class="ah5-demo-stage">
       <component :is="demoComponent" v-if="demoComponent" />
-      <p v-else class="demo-note">No demo component is registered for this feature yet.</p>
+      <p v-else class="demo-note">{{ text.demo.noDemo }}</p>
     </div>
   </section>
 </template>

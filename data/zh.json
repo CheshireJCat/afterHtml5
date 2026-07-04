@@ -1,0 +1,260 @@
+{
+  "site": {
+    "title": "After HTML5",
+    "description": "HTML5 之后的新 HTML 能力展示项目。",
+    "featureIndexTitle": "特性索引",
+    "featureIndexDescription": "按问题场景、成熟度和使用方式浏览现代 HTML 能力。",
+    "overview": "概览",
+    "footerMessage": "现代 HTML demo 导航。生产环境支持情况请以 MDN 和兼容性数据为准。",
+    "home": {
+      "kicker": "HTML5 时代之后的 HTML Living Standard",
+      "lead": "一份面向前端开发者的现代 HTML 能力地图：它解决什么问题，语法怎么写，什么时候适合上线，以及浏览器在真实 UI 中会怎么表现。",
+      "browse": "浏览特性",
+      "specimen": "特性样本",
+      "entries": "个条目",
+      "startTitle": "从问题出发",
+      "startBody": "每个页面都绑定一个具体 UI 任务。demo 不是装饰，而是为了展示这个 HTML 原语到底替你处理了什么。",
+      "modelTitle": "内容模型",
+      "modelBody": "结构化数据是唯一源头。页面、侧边栏、索引、成熟度标签、参考链接和 demo 保持同步。"
+    },
+    "index": {
+      "searchAria": "特性搜索和筛选",
+      "searchLabel": "搜索特性",
+      "searchPlaceholder": "popover、表单、shadow、搜索",
+      "categoryLabel": "分类",
+      "allCategories": "全部分类",
+      "maturityLabel": "成熟度",
+      "allMaturity": "全部成熟度",
+      "matchPrefix": "当前筛选匹配",
+      "matchSuffix": "个特性"
+    },
+    "sections": {
+      "whatItSolves": "解决什么问题",
+      "syntax": "语法",
+      "practicalGuidance": "使用建议",
+      "watchOuts": "注意事项",
+      "accessibilityNotes": "可访问性要点",
+      "references": "参考资料"
+    },
+    "demo": {
+      "label": "演示",
+      "notice": "观察重点",
+      "noDemo": "这个特性还没有注册 demo 组件。"
+    },
+    "maturity": {
+      "baseline": "Baseline",
+      "widely": "广泛可用",
+      "limited": "有限支持",
+      "modern": "现代 HTML"
+    }
+  },
+  "categories": {
+    "Native interaction": "原生交互",
+    "Semantics": "语义",
+    "Web Components": "Web Components",
+    "Editing": "编辑",
+    "Forms": "表单",
+    "Interaction safety": "交互安全",
+    "Findability": "可发现性"
+  },
+  "features": {
+    "popover": {
+      "status": "Baseline 新近可用",
+      "support": "全局属性已经具备较好的跨浏览器互操作性；相关 API 仍在继续补齐细节。",
+      "summary": "用原生 top layer 构建菜单、引导气泡和非模态浮层，不再自己维护 z-index、外部点击和 Esc 关闭逻辑。",
+      "solves": "适合需要轻量关闭和顶层展示的浮层 UI，但不需要让页面其余区域变为不可交互。",
+      "demo": "一个命令托盘：只用属性打开，并可通过点击外部或按 Esc 关闭。",
+      "usage": "用于短暂出现的小型界面：菜单、快捷操作、提示、引导说明和工具面板。若任务必须阻塞页面，应使用 dialog。",
+      "pitfalls": [
+        "Popover 本身不会提供 dialog 语义。",
+        "根据是否需要轻量关闭和单实例打开行为，选择 auto、hint 或 manual。",
+        "定位仍然需要 CSS；top layer 只解决层级堆叠。"
+      ],
+      "accessibility": [
+        "使用语义明确的 button 作为触发器。",
+        "只有内容真的表现为菜单、tooltip 或注释时，才添加对应 role。",
+        "不要把必须完成的流程步骤放进可轻易关闭的 popover。"
+      ]
+    },
+    "invoker-commands": {
+      "status": "Baseline 2025",
+      "support": "自 2025 年末起，在核心 Baseline 浏览器集合中成为新近可用能力。",
+      "summary": "让按钮用声明式方式控制 popover、dialog 和自定义命令，不必等应用 JavaScript 绑定 click 监听。",
+      "solves": "为常见的显示、隐藏、切换和关闭行为提供 HTML 优先的控制关系。",
+      "demo": "一组工具栏按钮通过 command 属性控制 popover 和 dialog，而不是依赖 click handler。",
+      "usage": "适合作为内建交互元素的渐进增强，尤其适合框架 hydration 完成前也需要基础可用的界面。",
+      "pitfalls": [
+        "只有 button 可以作为 invoker。",
+        "内建命令刻意保持有限。",
+        "框架抽象可能需要升级后才能完整透传这些属性。"
+      ],
+      "accessibility": [
+        "触发器保持为真实 button。",
+        "使用可见标签，不要只依赖图标命令。",
+        "只有支持目标确实需要时，才补 JS fallback。"
+      ]
+    },
+    "dialog-request-close": {
+      "status": "Baseline 2025",
+      "support": "dialog 元素已经成熟；requestClose 是新近可用的可取消关闭路径。",
+      "summary": "使用原生 modal 行为、returnValue、form method=dialog 和可取消的关闭请求，而不是重新实现焦点管理。",
+      "solves": "适合确认流程和模态表单：既需要平台级焦点处理，也需要明确结果值。",
+      "demo": "一个发货确认 dialog：返回用户选择，并可拦截有风险的关闭尝试。",
+      "usage": "用于模态任务、确认和短表单。配合 form method=dialog 可以用极少代码获得按钮返回值。",
+      "pitfalls": [
+        "showModal() 仍是命令式调用；除非配合 invoker commands，否则仍需要一个很小的触发逻辑。",
+        "requestClose() 可以被取消，close() 不可以。",
+        "点击 backdrop 关闭依赖更新的 closedby 支持，应作为增强能力看待。"
+      ],
+      "accessibility": [
+        "每个 dialog 都要有可见标题。",
+        "提供明显的关闭或取消路径。",
+        "避免把复杂应用导航塞进 modal。"
+      ]
+    },
+    "exclusive-details": {
+      "status": "现代 HTML",
+      "support": "现代浏览器支持在同组 details 元素上使用 name 属性实现互斥展开。",
+      "summary": "给一组 details 元素同一个 name，就能得到原生互斥 accordion。",
+      "solves": "适合 FAQ、设置和对比信息：用户每次只需要展开一个说明块。",
+      "demo": "一个配送选项 accordion：一次只打开一项，不需要 JavaScript 状态管理。",
+      "usage": "当内容本质上是披露说明时使用；不要把它当 tabs 或应用导航替代品。",
+      "pitfalls": [
+        "details 不是 tab 组件。",
+        "只有关闭上一个面板不会造成数据丢失时，才使用互斥行为。",
+        "自定义 summary 样式时必须保留焦点和展开状态的可见性。"
+      ],
+      "accessibility": [
+        "summary 文案保持清晰，并说明用户会看到什么。",
+        "不要移除默认键盘行为。",
+        "避免把大型表单放进 summary。"
+      ]
+    },
+    "search-element": {
+      "status": "Baseline 2023",
+      "support": "search 元素已经在现代浏览器中可用，并会映射为搜索 landmark。",
+      "summary": "用专门的 search landmark 表达站点、页面或应用搜索，而不是反复在通用容器上写 role=search。",
+      "solves": "为搜索 UI 提供清晰的屏幕阅读器语义和文档结构。",
+      "demo": "一个特性筛选器：控件使用 search 语义，结果保留在 search landmark 外部。",
+      "usage": "包裹执行搜索或筛选的控件，不要把搜索结果也放在 search 元素里。",
+      "pitfalls": [
+        "这个元素不会替你实现搜索逻辑。",
+        "结果应留在 main 内容中，而不是放进 search。",
+        "不要无标签地嵌套多个 search landmark。"
+      ],
+      "accessibility": [
+        "为字段保留可见 label。",
+        "页面中有多个 search landmark 时，用 aria-label 命名。",
+        "查询字段使用 type=search。"
+      ]
+    },
+    "declarative-shadow-dom": {
+      "status": "Baseline 2024",
+      "support": "自 2024 年起作为 Baseline 新近可用能力，标准属性为 shadowrootmode。",
+      "summary": "直接在 HTML 中声明 shadow root，让服务器输出带有作用域样式边界的组件标记。",
+      "solves": "适合需要 SSR、流式输出或静态 HTML 的 Web Components，同时希望 JavaScript 升级前就有样式隔离。",
+      "demo": "一个通过 iframe 真实解析的服务端渲染资料卡，shadow 样式不会泄漏到页面。",
+      "usage": "当组件需要 SSR、streaming 或静态 HTML 输出，同时仍受益于 shadow DOM 边界时使用。",
+      "pitfalls": [
+        "shadowrootmode template 只在解析阶段生效；之后用 innerHTML 设置不会附加 shadow root。",
+        "旧示例可能还在使用已移除的 shadowroot 属性。",
+        "hydration 自定义元素时要先检查是否已有 shadowRoot。"
+      ],
+      "accessibility": [
+        "升级前的 light DOM 内容也要有意义。",
+        "不要把关键文本藏进不可访问的自定义控件内部。",
+        "有意识地使用 slot，保证阅读顺序合理。"
+      ]
+    },
+    "plaintext-only": {
+      "status": "Baseline 2025",
+      "support": "自 2025 年 3 月起作为 Baseline 新近可用能力。",
+      "summary": "让元素可编辑，同时强制粘贴和编辑内容保持为纯文本。",
+      "solves": "适合评论框、命令输入、便签和 token 编辑器：需要 contenteditable 的灵活性，又不想处理富文本粘贴清理。",
+      "demo": "一个发布说明草稿框：展示 DOM 中不会带入富文本 HTML，同时编辑区域仍然灵活。",
+      "usage": "当 textarea 太受限，但富文本会带来清洗和格式问题时使用。",
+      "pitfalls": [
+        "它本身不是完整表单控件。",
+        "仍然需要校验、持久化和提交逻辑。",
+        "换行和空白字符需要按产品规则处理。"
+      ],
+      "accessibility": [
+        "为可编辑区域提供 label。",
+        "合适时暴露 role=textbox 和 aria-multiline。",
+        "保留清晰的焦点样式。"
+      ]
+    },
+    "show-picker": {
+      "status": "Baseline 广泛可用",
+      "support": "input pickers 自 2022 年起在现代浏览器中广泛可用；select.showPicker 仍更受限。",
+      "summary": "用自己的可见按钮打开原生日期、颜色、文件等浏览器 picker，而不是重建 picker UI。",
+      "solves": "设计上需要独立触发按钮，但实际选择器仍应保持平台原生。",
+      "demo": "一个旅行表单：自定义触发按钮打开真实浏览器 picker。",
+      "usage": "当布局需要独立触发器，但 picker 本身应由浏览器和平台负责时使用。",
+      "pitfalls": [
+        "这个方法通常必须在点击等用户激活中调用。",
+        "不同 input 类型和平台支持并不完全一致。",
+        "不要伪造 picker 内容；让浏览器拥有这一部分。"
+      ],
+      "accessibility": [
+        "除非有强理由，否则真实 input 保持在 tab 顺序中。",
+        "label 与 input 正确关联。",
+        "使用紧凑控件时，在可读文本中同步已选值。"
+      ]
+    },
+    "inert": {
+      "status": "Baseline 广泛可用",
+      "support": "在现代核心浏览器集合中已经广泛可用。",
+      "summary": "把一棵子树标记为不可交互，使其中内容不能点击、聚焦、选中，也不会被辅助技术访问。",
+      "solves": "适合覆盖层背后的禁用页面区域、预览面板、非活动步骤和临时 UI 锁定。",
+      "demo": "一个设置工作区：出现审核层时，背景区域真正不可用。",
+      "usage": "当整个区域都应不可用时使用，而不是只做视觉变暗。",
+      "pitfalls": [
+        "inert 会移除后代的交互性，包括链接和表单控件。",
+        "不要 inert 仍然必须用于完成任务的内容。",
+        "视觉变暗是另一回事；需要配合 CSS 让状态明显。"
+      ],
+      "accessibility": [
+        "把 inert 与清晰的活动区域配对。",
+        "启用 overlay 时主动移动焦点。",
+        "离开 inert 状态后恢复焦点。"
+      ]
+    },
+    "customizable-select": {
+      "status": "有限支持",
+      "support": "仍是实验能力，不属于 Baseline；适合现在作为渐进增强提前学习。",
+      "summary": "用 button、selectedcontent、::picker(select) 和 appearance: base-select 等 HTML/CSS 钩子定制原生 select 内部。",
+      "solves": "需要富选项展示，又想保留原生 select 行为，避免重写复杂 ARIA 自定义组件。",
+      "demo": "一个配送方式选择器：选中值和下拉选项都可以承载结构化内容。",
+      "usage": "用于实验或渐进增强；经典 select fallback 仍然重要。",
+      "pitfalls": [
+        "还不是 Baseline。",
+        "框架 hydration 可能与浏览器管理的 selectedcontent 克隆行为不一致。",
+        "动态更新 option 时，selectedcontent 不一定自动重新克隆。"
+      ],
+      "accessibility": [
+        "不要把它用成 split button 或无关的复合控件。",
+        "即使没有装饰，option 文本也要有意义。",
+        "在每个目标浏览器中确认键盘行为。"
+      ]
+    },
+    "hidden-until-found": {
+      "status": "有限支持",
+      "support": "若干现代浏览器支持，但还不属于 Baseline。",
+      "summary": "让内容保持折叠，同时允许页面内查找和 URL fragment 自动把它显露出来。",
+      "solves": "适合大型参考页、归档段落和密集文档：内容可折叠，但仍应被浏览器搜索和深链发现。",
+      "demo": "一个压缩的 changelog 片段：通过 fragment 导航时会自动显露。",
+      "usage": "用于非关键折叠内容，这些内容仍需要被浏览器搜索和深链发现。",
+      "pitfalls": [
+        "并非所有浏览器都会显露 until-found 内容。",
+        "支持浏览器中，该元素仍会以 containment 行为参与布局。",
+        "不要用它隐藏主导航或必填表单字段。"
+      ],
+      "accessibility": [
+        "提供一个普通的可见路径来展开同一内容。",
+        "使用稳定的 fragment id。",
+        "不要让搜索成为找到重要内容的唯一方式。"
+      ]
+    }
+  }
+}

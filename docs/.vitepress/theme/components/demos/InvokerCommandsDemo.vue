@@ -1,31 +1,69 @@
+<script setup>
+import { computed } from 'vue';
+import { useLocale } from '../useLocale';
+
+const { isZh, text } = useLocale();
+
+const copy = computed(() =>
+  isZh.value
+    ? {
+        toolbar: '声明式命令工具栏',
+        toggle: '切换面板',
+        openDialog: '打开 dialog',
+        panelTitle: '不依赖 hydration 的面板',
+        panelBody: '这个面板可以在框架 click listener 准备好之前打开。',
+        closePanel: '关闭面板',
+        dialogTitle: '声明式 dialog 命令',
+        dialogBody: '外部按钮使用 command="show-modal"。关闭按钮使用 command="close"。',
+        close: '关闭',
+        fallback: '在不支持的浏览器里，这些属性只是 inert，fallback 绑定会很直接。',
+        notice: '按钮仍然是真实 button。命令关系写在 HTML 里，而不是藏在 click handler 里。',
+      }
+    : {
+        toolbar: 'Declarative command toolbar',
+        toggle: 'Toggle panel',
+        openDialog: 'Open dialog',
+        panelTitle: 'Hydration-independent panel',
+        panelBody: 'This panel can open before framework click listeners are ready.',
+        closePanel: 'Close panel',
+        dialogTitle: 'Declarative dialog command',
+        dialogBody: 'The button outside used command="show-modal". The close button uses command="close".',
+        close: 'Close',
+        fallback:
+          'In unsupported browsers these attributes are inert, which makes fallback wiring straightforward.',
+        notice: 'The buttons are still real buttons. The command relationship lives in HTML rather than a click handler.',
+      },
+);
+</script>
+
 <template>
   <div class="demo-two-col">
     <div class="demo-panel invoker-board">
-      <div class="toolbar" aria-label="Declarative command toolbar">
-        <button class="demo-button primary" commandfor="invoker-popover" command="toggle-popover">Toggle panel</button>
-        <button class="demo-button" commandfor="invoker-dialog" command="show-modal">Open dialog</button>
+      <div class="toolbar" :aria-label="copy.toolbar">
+        <button class="demo-button primary" commandfor="invoker-popover" command="toggle-popover">{{ copy.toggle }}</button>
+        <button class="demo-button" commandfor="invoker-dialog" command="show-modal">{{ copy.openDialog }}</button>
       </div>
 
       <div id="invoker-popover" class="invoker-popover" popover>
-        <strong>Hydration-independent panel</strong>
-        <p>This panel can open before framework click listeners are ready.</p>
-        <button class="demo-button" commandfor="invoker-popover" command="hide-popover">Close panel</button>
+        <strong>{{ copy.panelTitle }}</strong>
+        <p>{{ copy.panelBody }}</p>
+        <button class="demo-button" commandfor="invoker-popover" command="hide-popover">{{ copy.closePanel }}</button>
       </div>
 
       <dialog id="invoker-dialog" class="invoker-dialog">
-        <h3>Declarative dialog command</h3>
-        <p>The button outside used command="show-modal". The close button uses command="close".</p>
-        <button class="demo-button primary" commandfor="invoker-dialog" command="close">Close</button>
+        <h3>{{ copy.dialogTitle }}</h3>
+        <p>{{ copy.dialogBody }}</p>
+        <button class="demo-button primary" commandfor="invoker-dialog" command="close">{{ copy.close }}</button>
       </dialog>
 
       <p class="demo-note">
-        In unsupported browsers these attributes are inert, which makes fallback wiring straightforward.
+        {{ copy.fallback }}
       </p>
     </div>
 
     <div class="demo-panel">
-      <h3>What to notice</h3>
-      <p>The buttons are still real buttons. The command relationship lives in HTML rather than a click handler.</p>
+      <h3>{{ text.demo.notice }}</h3>
+      <p>{{ copy.notice }}</p>
       <pre class="demo-code"><code>&lt;button commandfor="panel"
         command="toggle-popover"&gt;
   Toggle panel

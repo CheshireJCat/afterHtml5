@@ -1,6 +1,6 @@
 ---
 title: "After HTML5"
-description: "HTML capabilities after the HTML5 era."
+description: "HTML5 之后的新 HTML 能力展示项目。"
 sidebar: false
 aside: false
 lastUpdated: false

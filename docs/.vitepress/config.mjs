@@ -3,6 +3,7 @@ import { sidebarEn } from './generated/sidebar.en.mjs';
 import { sidebarZh } from './generated/sidebar.zh.mjs';
 
 const githubLink = 'https://github.com/CheshireJCat/afterHtml5';
+const afterCss3Link = 'https://cheshirejcat.github.io/afterCss3';
 
 export default defineConfig({
   title: 'After HTML5',
@@ -26,6 +27,7 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Features', link: '/features/' },
+          { text: 'After CSS3', link: afterCss3Link },
           { text: 'GitHub', link: githubLink },
         ],
         sidebar: sidebarEn,
@@ -45,6 +47,7 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: '特性', link: '/zh/features/' },
+          { text: 'After CSS3', link: afterCss3Link },
           { text: 'GitHub', link: githubLink },
         ],
         sidebar: sidebarZh,
